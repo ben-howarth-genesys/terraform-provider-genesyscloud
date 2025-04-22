@@ -76,6 +76,8 @@ func createKnowledgeDocument(ctx context.Context, d *schema.ResourceData, meta i
 	}
 
 	if published {
+		// Create Mock Variation
+
 		_, resp, versionErr := proxy.createKnowledgebaseDocumentVersions(ctx, knowledgeBaseId, *knowledgeDocument.Id, &platformclientv2.Knowledgedocumentversion{})
 		if versionErr != nil {
 			_, deleteError := proxy.deleteKnowledgeKnowledgebaseDocument(ctx, knowledgeBaseId, *knowledgeDocument.Id)
@@ -84,6 +86,8 @@ func createKnowledgeDocument(ctx context.Context, d *schema.ResourceData, meta i
 			}
 			return util.BuildAPIDiagnosticError("genesyscloud_knowledge_document", fmt.Sprintf("Failed to publish knowledge document error: %s", versionErr), resp)
 		}
+
+		// delete
 	}
 
 	id := BuildDocumentResourceDataID(*knowledgeDocument.Id, knowledgeBaseId)
