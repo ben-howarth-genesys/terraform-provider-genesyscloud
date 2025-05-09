@@ -34,7 +34,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/mohae/deepcopy"
 
-	"github.com/mypurecloud/platform-client-sdk-go/v154/platformclientv2"
+	"github.com/mypurecloud/platform-client-sdk-go/v157/platformclientv2"
 )
 
 /*
@@ -404,7 +404,8 @@ func (g *GenesysCloudResourceExporter) buildResourceConfigMap() (diagnostics dia
 		if len(g.resourceTypesMaps[resource.Type][resource.BlockLabel]) > 0 || len(g.dataSourceTypesMaps[resource.Type][resource.BlockLabel]) > 0 {
 			algorithm := fnv.New32()
 			algorithm.Write([]byte(uuid.NewString()))
-			resource.BlockLabel = resource.BlockLabel + "_" + strconv.FormatUint(uint64(algorithm.Sum32()), 10)
+			// The _BRCM prefix is meant to be an identifier so we can tell that the hash was generated here and not in the sanitizer.
+			resource.BlockLabel = resource.BlockLabel + "_BRCM" + strconv.FormatUint(uint64(algorithm.Sum32()), 10)
 			g.updateSanitizeMap(*g.exporters, resource)
 		}
 
